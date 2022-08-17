@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/atuacao")
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class AtuacaoController {
     private final AtuacaoService atuacaoService;
 
     @PostMapping
-    public ResponseEntity<AtuacaoDTO> createAtuacao(@RequestBody AtuacaoDTO atuacaoDTO){
+    public ResponseEntity<AtuacaoDTO> createAtuacao(@RequestBody @Valid AtuacaoDTO atuacaoDTO){
         atuacaoService.createAtuacao(atuacaoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(atuacaoDTO);
     }

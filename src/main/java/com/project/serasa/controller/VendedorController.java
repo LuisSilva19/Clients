@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class VendedorController {
     }
 
     @PostMapping
-    public ResponseEntity<VendedorDTO> createVendedor(@RequestBody VendedorDTO vendedorDTO, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<VendedorDTO> createVendedor(@RequestBody @Valid VendedorDTO vendedorDTO, UriComponentsBuilder uriComponentsBuilder){
         VendedorDTO vendedor = vendedorService.createVendedor(vendedorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(vendedor);
     }
