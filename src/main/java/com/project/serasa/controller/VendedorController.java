@@ -1,6 +1,5 @@
 package com.project.serasa.controller;
 
-import com.project.serasa.domain.Vendedor;
 import com.project.serasa.dto.VendedorAtuacaoDTO;
 import com.project.serasa.dto.VendedorDTO;
 import com.project.serasa.service.VendedorService;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/vendedor")
@@ -24,19 +22,17 @@ public class VendedorController {
 
     @GetMapping
     public ResponseEntity<List<VendedorAtuacaoDTO>> findAll(){
-        List<VendedorAtuacaoDTO> vendedorAtuacaoDTO = vendedorService.findAll();
-        return ResponseEntity.ok(vendedorAtuacaoDTO);
+        return vendedorService.findAll()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VendedorDTO> findById(@RequestParam("id") Integer id){
-        Optional<Vendedor> vendedor = vendedorService.findById(id);
-        if(vendedor.isPresent()){
-            VendedorDTO vendedorDTO = modelMapper.map(vendedor.get(), VendedorDTO.class);
-            return ResponseEntity.ok(vendedorDTO);
-        }else{
-            return ResponseEntity.noContent().build();
-        }
+    public ResponseEntity<VendedorDTO> findById(@PathVariable("id") Integer id){
+        return vendedorService.findById(id)
+                .map(vendedor -> modelMapper.map(vendedor, VendedorDTO.class))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @PostMapping

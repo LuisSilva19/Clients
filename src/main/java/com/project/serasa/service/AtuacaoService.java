@@ -4,10 +4,9 @@ import com.project.serasa.domain.Atuacao;
 import com.project.serasa.dto.AtuacaoDTO;
 import com.project.serasa.repository.AtuacaoRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +14,11 @@ public class AtuacaoService {
 
     private final AtuacaoRepository atuacaoRepository;
     private final ModelMapper modelMapper;
+    private static final String EXPECTION_MESSAGE = "exception.ar.notfound.regiao";
 
     public AtuacaoDTO findByRegiao(String regiao) {
         Atuacao atuacao = atuacaoRepository.findById(regiao)
-                .orElseThrow(()-> new EntityNotFoundException());
+                .orElseThrow(() -> new ServiceException(EXPECTION_MESSAGE));
 
         return modelMapper.map(atuacao, AtuacaoDTO.class);
     }
